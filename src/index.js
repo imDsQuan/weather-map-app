@@ -11,9 +11,27 @@ const fetch = require('node-fetch')
 
 db.connect();
 
-
+//Socket IO
 const app = express();
-app.listen(3000, () => console.log('listening at 3000'));
+
+const server = require('http').createServer(app);
+server.listen(3000);
+const io = require('socket.io')(server);
+var mangUS = []
+io.on('connection', client => {
+    console.log(client.id + "Đã kết nối");
+    client.on('Client_send_pos', (data) => {
+        mangUS.push(data);
+        console.log(data);
+        client.emit('send_mang_pos', mangUS);
+    })
+
+});
+io.listen(server);
+
+
+
+//app.listen(3000, () => console.log('listening at 3000'));
 app.use(express.static('src/public'));
 
 app.get('/weather/all', async function(req, res) {
