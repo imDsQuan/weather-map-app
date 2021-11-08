@@ -86,15 +86,34 @@ info.onAdd = function(map) {
     return this._div;
 };
 
-info.update = async function(props) {
-    // const api_url = `weather/${props.lat},${props.lon}`;
-    // const response = await fetch(api_url);
-    // const json = await response.json();
-    this._div.innerHTML = '<h4>Weather Forecast</h4>' + (props ?
-        ' <b>' + props.Name + '</b><br /> Temperature: ' + props.temperature + '<span>&#8451;</span>' +
-        '<br>History weather: ' + props.lon + ' ' + props.lat + ' ' + '<br>' :
-        'Click on a state');
 
+var dateNow = new Date();
+var previousOneDate = getDateMonth((new Date(Date.now() - 86400000)))
+var previousTwoDate = getDateMonth((new Date(Date.now() - 86400000 * 2)))
+var previousThreeDate = getDateMonth((new Date(Date.now() - 86400000 * 3)))
+var previousFourDate = getDateMonth((new Date(Date.now() - 86400000 * 4)))
+var previousFiveDate = getDateMonth((new Date(Date.now() - 86400000 * 5)))
+
+function getDateMonth(dateObj) {
+    return (dateObj.getMonth() + 1) + '/' + dateObj.getDate() + '/' + dateObj.getFullYear();
+}
+
+
+info.update = async function(props) {
+    console.log(previousOneDate)
+    const api_url = `weather/history/?lat=${props.lat}&lon=${props.lon}`;
+    const response = await fetch(api_url);
+    const json = await response.json();
+    console.log(json);
+    this._div.innerHTML = await '<h4>Weather Forecast</h4>' + (props ?
+        ' <b>' + props.Name + '</b><br /> Temperature: ' + props.temperature + ' <span>&#8451;</span>' +
+        '<br>History weather: <br>' +
+        previousOneDate + ': Temperature: ' + (json[0].current.temp / 10).toFixed(2) + '<br>' +
+        previousTwoDate + ': Temperature: ' + (json[1].current.temp / 10).toFixed(2) + '<br>' +
+        previousThreeDate + ': Temperature: ' + (json[2].current.temp / 10).toFixed(2) + '<br>' +
+        previousFourDate + ': Temperature: ' + (json[3].current.temp / 10).toFixed(2) + '<br>' +
+        previousFiveDate + ': Temperature: ' + (json[4].current.temp / 10).toFixed(2) + '<br>' :
+        'Click on a state');
 };
 
 
@@ -121,7 +140,6 @@ fetch('/weather/all')
             cityData.features[i].properties.wind_speed = parseFloat(data[i].wind_speed).toFixed(1).toString();
             cityData.features[i].properties.lat = parseFloat(data[i].lat);
             cityData.features[i].properties.lon = parseFloat(data[i].lng);
-            console.log(cityData.features[i].properties.temperature)
         }
         return cityData;
     }).then(function(cityData) {

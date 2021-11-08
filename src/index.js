@@ -73,11 +73,14 @@ app.get('/weather/all', async function(req, res) {
 
 })
 
-app.get('/weather/history/', async(req, res) => {
+app.get('/weather/history', (req, res) => {
+    // const latlon = res.params.latlon.split(',');
+    var lat = req.query.lat;
+    console.log(lat)
+    var lon = req.query.lon;
+    console.log(lon)
 
-})
 
-function getWeatherHistory(lat, lon) {
     var dateNow = new Date();
     var previousOneDate = (new Date(Date.now() - 86400000).getTime() / 1000).toFixed(0);
     var previousTwoDate = (new Date(Date.now() - 86400000 * 2).getTime() / 1000).toFixed(0);
@@ -92,13 +95,19 @@ function getWeatherHistory(lat, lon) {
     historyDate.push(previousFourDate);
     historyDate.push(previousFiveDate);
 
-    console.log(historyDate);
+    // console.log(historyDate);
 
     let responses = [];
-
+    let array = new Array;
     for (let i = 0; i < 5; i++) {
-        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=a5c0f1936651c1c92862924ad953525e`))
+        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=a5c0f1936651c1c92862924ad953525e`)
+            .then(res => res.json())
+            .then(res => {
+                array.push(res);
+            }))
     }
 
-    return Promise.all(responses);
-}
+    Promise.all(responses).then(function() {
+        res.json(array);
+    });
+})
