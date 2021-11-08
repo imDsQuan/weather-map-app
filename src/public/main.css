@@ -65,10 +65,10 @@ body {
     background: none;
     outline: none;
     float: left;
-    padding: 0;
+    padding: 0 10px;
     color: white;
     font-size: 16px;
     transition: 0.4s;
     line-height: 40px;
-    width: 270px;
+                width: 270px;
 }

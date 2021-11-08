@@ -72,3 +72,33 @@ app.get('/weather/all', async function(req, res) {
 
 
 })
+
+app.get('/weather/history/', async(req, res) => {
+
+})
+
+function getWeatherHistory(lat, lon) {
+    var dateNow = new Date();
+    var previousOneDate = (new Date(Date.now() - 86400000).getTime() / 1000).toFixed(0);
+    var previousTwoDate = (new Date(Date.now() - 86400000 * 2).getTime() / 1000).toFixed(0);
+    var previousThreeDate = (new Date(Date.now() - 86400000 * 3).getTime() / 1000).toFixed(0);
+    var previousFourDate = (new Date(Date.now() - 86400000 * 4).getTime() / 1000).toFixed(0);
+    var previousFiveDate = (new Date(Date.now() - 86400000 * 5).getTime() / 1000).toFixed(0);
+
+    var historyDate = [];
+    historyDate.push(previousOneDate);
+    historyDate.push(previousTwoDate);
+    historyDate.push(previousThreeDate);
+    historyDate.push(previousFourDate);
+    historyDate.push(previousFiveDate);
+
+    console.log(historyDate);
+
+    let responses = [];
+
+    for (let i = 0; i < 5; i++) {
+        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=a5c0f1936651c1c92862924ad953525e`))
+    }
+
+    return Promise.all(responses);
+}
