@@ -44,7 +44,7 @@ app.get('/weather/all', async function(req, res) {
             if (!(updateDate == date)) {
                 let length = weathers.length;
                 for (let i = 0; i < length; i++) {
-                    const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${weathers[i].lat}&lon=${weathers[i].lng}&exclude=hourly,current,minutely,alerts&appid=a5c0f1936651c1c92862924ad953525e`;
+                    const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${weathers[i].lat}&lon=${weathers[i].lng}&exclude=hourly,current,minutely,alerts&appid=d12a9593d6ac6bb9a3d411702d0ce789`;
                     fetch(api_url)
                         .then(res => res.json())
                         .then(json => {
@@ -101,7 +101,7 @@ app.get('/weather/history', (req, res) => {
     let array = new Array;
     for (let i = 0; i < 5; i++) {
         console.log(historyDate[i])
-        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=a5c0f1936651c1c92862924ad953525e`)
+        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=d12a9593d6ac6bb9a3d411702d0ce789`)
             .then(res => res.json())
             .then(res => {
                 array.push(res);
