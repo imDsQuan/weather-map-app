@@ -108,11 +108,11 @@ info.update = async function(props) {
     this._div.innerHTML = await '<h4>Weather Forecast</h4>' + (props ?
         ' <b>' + props.Name + '</b><br /> Temperature: ' + props.temperature + ' <span>&#8451;</span>' +
         '<br>History weather: <br>' +
-        previousOneDate + ': Temperature: ' + (json[0].current.temp / 10).toFixed(2) + '<br>' +
-        previousTwoDate + ': Temperature: ' + (json[1].current.temp / 10).toFixed(2) + '<br>' +
-        previousThreeDate + ': Temperature: ' + (json[2].current.temp / 10).toFixed(2) + '<br>' +
-        previousFourDate + ': Temperature: ' + (json[3].current.temp / 10).toFixed(2) + '<br>' +
-        previousFiveDate + ': Temperature: ' + (json[4].current.temp / 10).toFixed(2) + '<br>' :
+        previousOneDate + ': Temperature: ' + (json[0].current.temp - 273.15).toFixed(2) + '<br>' +
+        previousTwoDate + ': Temperature: ' + (json[1].current.temp - 273.15).toFixed(2) + '<br>' +
+        previousThreeDate + ': Temperature: ' + (json[2].current.temp - 273.15).toFixed(2) + '<br>' +
+        previousFourDate + ': Temperature: ' + (json[3].current.temp - 273.15).toFixed(2) + '<br>' +
+        previousFiveDate + ': Temperature: ' + (json[4].current.temp - 273.15).toFixed(2) + '<br>' :
         'Click on a state');
 };
 
@@ -258,8 +258,8 @@ function handleSearch() {
                 .then(json => {
                     console.log(json);
                     map.flyTo([kq.lat, kq.lon], 10)
-                    var temp = json.daily[0].temp.eve.toFixed(0) / 10;
-                    var eve = json.daily[0].feels_like.eve.toFixed(0) / 10;
+                    var temp = (json.daily[0].temp.day - 273.15).toFixed(1);
+                    var eve = (json.daily[0].feels_like.day - 273.15).toFixed(1);
 
                     console.log(temp);
                     L.marker([kq.lat, kq.lon]).addTo(map)

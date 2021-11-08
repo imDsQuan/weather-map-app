@@ -50,12 +50,12 @@ app.get('/weather/all', async function(req, res) {
                         .then(json => {
                             console.log(weathers[i]._id);
                             Weather.findOne({ "_id": weathers[i]._id }, function(err, weathers) {
-                                weathers.temp = (json.daily[0].temp.day / 10).toString();
+                                weathers.temp = (json.daily[0].temp.day - 273.15).toString();
                                 weathers.humidity = (json.daily[0].humidity).toString();
                                 weathers.cloud = (json.daily[0].clouds).toString();
                                 weathers.wind_speed = (json.daily[0].wind_speed).toString();
-                                weathers.min = (json.daily[0].temp.min / 10).toString();
-                                weathers.max = (json.daily[0].temp.max / 10).toString();
+                                weathers.min = (json.daily[0].temp.min - 273.15).toString();
+                                weathers.max = (json.daily[0].temp.max - 273.15).toString();
                                 weathers.rain = (json.daily[0].rain);
                                 weathers.save();
                                 if (err) throw err;
@@ -100,6 +100,7 @@ app.get('/weather/history', (req, res) => {
     let responses = [];
     let array = new Array;
     for (let i = 0; i < 5; i++) {
+        console.log(historyDate[i])
         responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=a5c0f1936651c1c92862924ad953525e`)
             .then(res => res.json())
             .then(res => {
