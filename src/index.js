@@ -1,4 +1,3 @@
-// import fetch from "node-fetch";
 const express = require('express');
 const mongoose = require('mongoose');
 const db = require('./config/db');
@@ -40,11 +39,13 @@ app.get('/weather/all', async function(req, res) {
             weathers = weathers.map(weather => weather.toObject());
             var today = new Date();
             var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
-            var updateDate = weathers[0].updatedAt.toLocaleString().slice(0, 9);
+            var updateDate = weathers[0].updatedAt.toLocaleString().slice(0, 10);
+            console.log(updateDate);
+            console.log(date);
             if (!(updateDate == date)) {
                 let length = weathers.length;
                 for (let i = 0; i < length; i++) {
-                    const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${weathers[i].lat}&lon=${weathers[i].lng}&exclude=hourly,current,minutely,alerts&appid=d12a9593d6ac6bb9a3d411702d0ce789`;
+                    const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${weathers[i].lat}&lon=${weathers[i].lng}&exclude=hourly,current,minutely,alerts&appid=bd8408b7b143390c35107ccbaa8e26bf`;
                     fetch(api_url)
                         .then(res => res.json())
                         .then(json => {
@@ -101,7 +102,7 @@ app.get('/weather/history', (req, res) => {
     let array = new Array;
     for (let i = 0; i < 5; i++) {
         console.log(historyDate[i])
-        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=d12a9593d6ac6bb9a3d411702d0ce789`)
+        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=bd8408b7b143390c35107ccbaa8e26bf`)
             .then(res => res.json())
             .then(res => {
                 array.push(res);

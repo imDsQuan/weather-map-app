@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;600&display=swap');
 html,
 body {
+    font-family: 'Poppins', sans-serif;
     height: 100%;
     margin: 0;
 }
@@ -15,7 +17,7 @@ body {
     background: white;
     background: rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    border-radius: 20px;
 }
 
 .info h4 {
@@ -70,5 +72,94 @@ body {
     font-size: 16px;
     transition: 0.4s;
     line-height: 40px;
-                width: 270px;
+    width: 270px;
+}
+
+.container {
+    display: flex;
+}
+
+.widget {
+    position: relative;
+    width: 350px;
+    height: 200px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    margin: 0 4px;
+}
+
+.widget .left {
+    position: absolute;
+    left: 0;
+    width: 190px;
+}
+
+.left-history {
+    width: 100% !important;
+}
+
+.widget .right {
+    position: absolute;
+    right: 0;
+    width: 200px;
+    color: #fff;
+    margin: 50px 0;
+}
+
+.icon {
+    width: 75%;
+    margin-bottom: -30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.weather-date {
+    color: #fff;
+    text-align: center;
+    margin-top: 0;
+}
+
+.widget .right .city {
+    font-size: 1em;
+    text-align: center;
+    margin: 0;
+    text-shadow: 1px 1px 5px #707070;
+}
+
+.widget .right .degree {
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    margin: 24px 0;
+    text-shadow: 1px 1px 5px #707070;
+}
+
+.widget .bottom {
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+}
+
+.widget .bottom div {
+    margin: 5px 10px;
+    text-align: center;
+    line-height: 100%;
+    font-size: 0.83em;
+    text-shadow: 1px 1px 5px #707070;
+}
+
+.widget .bottom div span {
+    display: block;
+}
+
+.history {
+    width: 180px;
+}
+
+.history .bottom div span {
+    margin-top: 5px;
 }

@@ -78,42 +78,93 @@ function getColor(d) {
 
 
 
-var info = L.control();
+var info = L.control({ position: 'bottomleft' });
 
 info.onAdd = function(map) {
     this._div = L.DomUtil.create('div', 'info');
-    this.update();
+    this._div.innerHTML = `<h4>Weather Forecast</h4>Click on the state`;
     return this._div;
 };
 
 
-var dateNow = new Date();
+var dateNow = getDateMonth(new Date(Date.now()));
 var previousOneDate = getDateMonth((new Date(Date.now() - 86400000)))
 var previousTwoDate = getDateMonth((new Date(Date.now() - 86400000 * 2)))
 var previousThreeDate = getDateMonth((new Date(Date.now() - 86400000 * 3)))
 var previousFourDate = getDateMonth((new Date(Date.now() - 86400000 * 4)))
 var previousFiveDate = getDateMonth((new Date(Date.now() - 86400000 * 5)))
 
+var historyDate = [];
+
+historyDate.push(previousOneDate);
+historyDate.push(previousTwoDate);
+historyDate.push(previousThreeDate);
+historyDate.push(previousFourDate);
+historyDate.push(previousFiveDate);
+
+
 function getDateMonth(dateObj) {
-    return (dateObj.getMonth() + 1) + '/' + dateObj.getDate() + '/' + dateObj.getFullYear();
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[dateObj.getDay()] + ' ' + (dateObj.getDate() + 1) + '/' + dateObj.getMonth();
 }
 
 
 info.update = async function(props) {
-    console.log(previousOneDate)
     const api_url = `weather/history/?lat=${props.lat}&lon=${props.lon}`;
     const response = await fetch(api_url);
     const json = await response.json();
     console.log(json);
-    this._div.innerHTML = await '<h4>Weather Forecast</h4>' + (props ?
-        ' <b>' + props.Name + '</b><br /> Temperature: ' + props.temperature + ' <span>&#8451;</span>' +
-        '<br>History weather: <br>' +
-        previousOneDate + ': Temperature: ' + (json[0].current.temp - 273.15).toFixed(2) + '<br>' +
-        previousTwoDate + ': Temperature: ' + (json[1].current.temp - 273.15).toFixed(2) + '<br>' +
-        previousThreeDate + ': Temperature: ' + (json[2].current.temp - 273.15).toFixed(2) + '<br>' +
-        previousFourDate + ': Temperature: ' + (json[3].current.temp - 273.15).toFixed(2) + '<br>' +
-        previousFiveDate + ': Temperature: ' + (json[4].current.temp - 273.15).toFixed(2) + '<br>' :
-        'Click on a state');
+    var weatherHistoryInfo = await '';
+    for (let i = 4; i >= 0; i--) {
+        weatherHistoryInfo += `
+    <div class="widget history">
+        <div class="left left-history">
+            <img src="animated/cloudy-day-2.svg" class="icon" alt="">
+            <h5 class="weather-date">${historyDate[i]}</h5>
+        </div>
+        <div class="bottom">
+            <div>
+                Temperature<span>${(json[i].current.temp -273.5).toFixed(1)}&#176;C</span>
+                <span style="font-size:0.9em">Humidity: ${json[i].current.humidity}%</span>
+            </div>
+        </div>
+    </div>`;
+    }
+
+    var weatherStateInfo = `
+        <div class="widget">
+            <div class="left">
+                <img src="animated/cloudy-day-2.svg" class="icon" alt="">
+                <h5 class="weather-date">${dateNow}</h5>
+            </div>
+            <div class="right">
+                <h5 class="city">${props.Name}</h5>
+                <h5 class="degree">${props.temperature}&#176;C</h5>
+            </div>
+            <div class="bottom">
+                <div>
+                    Wind Speed<span>${props.wind_speed} kmph</span>
+                </div>
+
+                <div>
+                    Cloud Cover <span>${props.cloud}%</span>
+                </div>
+
+                <div>
+                    Min <span>${props.min}&#176;C</span>
+                </div>
+
+                <div>
+                    Max <span>${props.max}&#176;C</span>
+                </div>
+            </div>
+        </div>`;
+
+    var weatherInfo = await `<div class="container">${weatherHistoryInfo} ${weatherStateInfo}</div> `
+
+    console.log(weatherInfo);
+
+    this._div.innerHTML = await weatherInfo;
 };
 
 
@@ -253,7 +304,7 @@ function handleSearch() {
             console.log(kq);
             var city = kq.address.state ? kq.address.state : kq.address.city;
 
-            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${kq.lat}&lon=${kq.lon}&exclude=hourly,current,minutely,alerts&appid=a5c0f1936651c1c92862924ad953525e`)
+            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${kq.lat}&lon=${kq.lon}&exclude=hourly,current,minutely,alerts&appid=d21277922eb5e4aa5a4326cf30025e6b`)
                 .then(response => response.json())
                 .then(json => {
                     console.log(json);
