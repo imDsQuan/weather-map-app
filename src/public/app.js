@@ -5,7 +5,7 @@ state = {
     }
 }
 
-var socket = io('https://3e05-116-104-160-255.ngrok.io')
+var socket = io('https://bfee-116-104-160-255.ngrok.io')
 
 var LeafIcon = L.Icon.extend({
     options: {
@@ -17,7 +17,7 @@ var LeafIcon = L.Icon.extend({
     }
 });
 
-//var humanIcon = new LeafIcon({ iconUrl: 'human.png' })
+var humanIcon = new LeafIcon({ iconUrl: 'human.png' })
 
 navigator.geolocation.getCurrentPosition((pos) => {
     this.state = {
@@ -199,6 +199,7 @@ fetch('/weather/all')
         function resetHighlight(e) {
             geojson.resetStyle(e.target);
         }
+
         geojson = L.geoJson(cityData, {
             style: function(features) {
                 return {
@@ -235,7 +236,6 @@ var input = document.getElementById("search-txt");
 
 function highlightFeature(e) {
     var layer = e.target;
-
     layer.setStyle({
         weight: 5,
         color: '#666',
@@ -273,7 +273,7 @@ var legend = L.control({ position: 'bottomright' });
 legend.onAdd = function(map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        temps = [-3.9, -1.2, 1.6, 4.3, 9.9, 12.7, 15.5, 18.2, 21, 23.8, 26.6, 29.3, 32.1, 34.9, 37.7, ],
+        temps = [12.7, 15.5, 18.2, 21, 23.8, 26.6, 29.3, 32.1, 34.9, 37.7, ],
         labels = [],
         from, to;
 
@@ -302,7 +302,10 @@ function handleSearch() {
             console.log(res);
             var kq = res.find(element => element.address.country_code === 'vn');
             console.log(kq);
-            var city = kq.address.state ? kq.address.state : kq.address.city;
+            var city = kq.address.city_district ? kq.address.city_district :
+                kq.address.county ? kq.address.county :
+                kq.address.city ? kq.address.city :
+                kq.address.town ? kq.address.town : kq.address.state;
 
             fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${kq.lat}&lon=${kq.lon}&exclude=hourly,current,minutely,alerts&appid=d21277922eb5e4aa5a4326cf30025e6b`)
                 .then(response => response.json())
