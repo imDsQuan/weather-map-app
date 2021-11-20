@@ -5,7 +5,7 @@ state = {
     }
 }
 
-var socket = io('https://bfee-116-104-160-255.ngrok.io')
+// var socket = io('https://bfee-116-104-160-255.ngrok.io')
 
 var LeafIcon = L.Icon.extend({
     options: {
@@ -105,7 +105,7 @@ historyDate.push(previousFiveDate);
 
 function getDateMonth(dateObj) {
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[dateObj.getDay()] + ' ' + (dateObj.getDate() + 1) + '/' + dateObj.getMonth();
+    return days[dateObj.getDay()] + ' ' + (dateObj.getDate()) + '/' + (dateObj.getMonth() + 1);
 }
 
 
@@ -162,7 +162,6 @@ info.update = async function(props) {
 
     var weatherInfo = await `<div class="container">${weatherHistoryInfo} ${weatherStateInfo}</div> `
 
-    console.log(weatherInfo);
 
     this._div.innerHTML = await weatherInfo;
 };
@@ -220,6 +219,8 @@ fetch('/weather/all')
             }
         }).addTo(map);
 
+        console.log(geojson);
+
         var button = document.getElementById('search-btn');
 
         button.onclick = handleSearch;
@@ -254,8 +255,8 @@ function highlightFeature(e) {
 
 function zoomToFeature(e) {
     var layer = e.target;
-
     map.fitBounds(e.target.getBounds());
+    console.log(e.target.getBounds());
     info.update(layer.feature.properties);
 
 }
@@ -307,7 +308,7 @@ function handleSearch() {
                 kq.address.city ? kq.address.city :
                 kq.address.town ? kq.address.town : kq.address.state;
 
-            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${kq.lat}&lon=${kq.lon}&exclude=hourly,current,minutely,alerts&appid=d21277922eb5e4aa5a4326cf30025e6b`)
+            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${kq.lat}&lon=${kq.lon}&exclude=hourly,current,minutely,alerts&appid=e787e70d0a2acf9d2fb7a5289aff51f6`)
                 .then(response => response.json())
                 .then(json => {
                     console.log(json);
@@ -316,12 +317,20 @@ function handleSearch() {
                     var eve = (json.daily[0].feels_like.day - 273.15).toFixed(1);
 
                     console.log(temp);
-                    L.marker([kq.lat, kq.lon]).addTo(map)
+                    var cityMarker = L.marker([kq.lat, kq.lon]).addTo(map)
                         .bindPopup(`<h3> ${city} <h3>
                         <p style="font-weight:400">Temperature: ${temp} <span>&#8451;</span>
                         <br>Feels Like: ${eve} <span>&#8451;</span>
                         </p>`)
                         .openPopup();
+                    map.eachLayer(function(layer) {
+                        console.log(layer);
+                        console.log(layer._leaflet_id);
+                    })
+
+
+                    console.log("Marker id: " + cityMarker._leaflet_id);
+
                 })
         })
 }

@@ -45,7 +45,7 @@ app.get('/weather/all', async function(req, res) {
             if (!(updateDate == date)) {
                 let length = weathers.length;
                 for (let i = 0; i < length; i++) {
-                    const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${weathers[i].lat}&lon=${weathers[i].lng}&exclude=hourly,current,minutely,alerts&appid=bd8408b7b143390c35107ccbaa8e26bf`;
+                    const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${weathers[i].lat}&lon=${weathers[i].lng}&exclude=hourly,current,minutely,alerts&appid=e787e70d0a2acf9d2fb7a5289aff51f6`;
                     fetch(api_url)
                         .then(res => res.json())
                         .then(json => {
@@ -82,7 +82,7 @@ app.get('/weather/history', (req, res) => {
     console.log(lon)
 
 
-    var dateNow = new Date();
+    var dateNow = new Date(); //=24 * 60 * 60
     var previousOneDate = (new Date(Date.now() - 86400000).getTime() / 1000).toFixed(0);
     var previousTwoDate = (new Date(Date.now() - 86400000 * 2).getTime() / 1000).toFixed(0);
     var previousThreeDate = (new Date(Date.now() - 86400000 * 3).getTime() / 1000).toFixed(0);
@@ -102,7 +102,7 @@ app.get('/weather/history', (req, res) => {
     let array = new Array;
     for (let i = 0; i < 5; i++) {
         console.log(historyDate[i])
-        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=bd8408b7b143390c35107ccbaa8e26bf`)
+        responses.push(fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${historyDate[i]}&appid=e787e70d0a2acf9d2fb7a5289aff51f6`)
             .then(res => res.json())
             .then(res => {
                 array.push(res);
